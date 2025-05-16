@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Eedi.Business.Contract\Eedi.Business.Contract.csproj" />
     <ProjectReference Include="..\Eedi.Business.Entities\Eedi.Business.Entities.csproj" />
-    <ProjectReference Include="..\Eedi.Utils\Eedi.Utils.csproj" />
   </ItemGroup>
 
 </Project>

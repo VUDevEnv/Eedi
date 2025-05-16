@@ -1,7 +1,6 @@
 ﻿using Eedi.Business.Contract;
 using Eedi.Business.Entities;
 using Microsoft.AspNetCore.Mvc;
-using System;
 
 namespace Eedi.Api.Controllers
 {
@@ -13,6 +12,11 @@ namespace Eedi.Api.Controllers
         private readonly IImproveService _improveService;
         private readonly ILogger<ImproveController> _logger;               
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="improveService"></param>
+        /// <param name="logger"></param>
         public ImproveController(
             IImproveService improveService, 
             ILogger<ImproveController> logger) 
@@ -41,7 +45,7 @@ namespace Eedi.Api.Controllers
                 var improve = await _improveService.GetImproveAsync(userName);
 
                 if (improve == null)                
-                    return NotFound();               
+                    return NotFound("Improve not found");               
 
                 return Ok(improve);   
             }
@@ -58,14 +62,14 @@ namespace Eedi.Api.Controllers
         /// </summary>
         /// <returns></returns>
         /// <response code="400">BadRequest</response>
-        /// <response code="200">Updated Misconception Answer</response>
+        /// <response code="200">OK</response>
         [HttpPut("misconceptionAnswer")]        
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<MisconceptionAnswer>> UpdateMisconceptionAnswerAsync(MisconceptionAnswer misconceptionAnswer)
         {
             try
             {
-                if (Enum.TryParse(misconceptionAnswer.Answer, out AnswerOption answerOption) 
+                if (Enum.TryParse(misconceptionAnswer.Answer, out AnswerOption _) 
                     && Enum.IsDefined(typeof(AnswerOption), misconceptionAnswer.Answer))
                 {
                     var updatedMisconceptionAnswer =

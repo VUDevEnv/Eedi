@@ -5,10 +5,11 @@ using Eedi.Business.Contract;
 
 namespace Eedi.Api
 {
-    public class Startup(IConfiguration configuration)
+    /// <summary>
+    /// Startup
+    /// </summary>
+    public class Startup
     {
-        public IConfiguration Configuration { get; } = configuration;
-        
         /// <summary>
         /// This method gets called by the runtime. Use this method to add services to the container.
         /// </summary>
