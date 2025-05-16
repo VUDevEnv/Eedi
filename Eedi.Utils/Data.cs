@@ -4,7 +4,7 @@ namespace Eedi.Utils
 {
     public static class Data
     {
-        public static Improve GetImprove() =>
+        public static Improve GetImproveWithMisconception() =>
             new Improve
             {
                 UserId = 1,
@@ -27,6 +27,7 @@ namespace Eedi.Utils
                                     {
                                         Id = 1,
                                         QuestionImage = string.Empty,
+                                        CorrectAnswer = false,
                                         AnswerOptions = Enum.GetValues(typeof(AnswerOption))
                                             .Cast<AnswerOption>()
                                             .Select(v => v.ToString())
@@ -36,6 +37,7 @@ namespace Eedi.Utils
                                     {
                                         Id = 2,
                                         QuestionImage = string.Empty,
+                                        CorrectAnswer = false,
                                         AnswerOptions = Enum.GetValues(typeof(AnswerOption))
                                             .Cast<AnswerOption>()
                                             .Select(v => v.ToString())
@@ -61,6 +63,7 @@ namespace Eedi.Utils
                                     {
                                         Id = 1,
                                         QuestionImage = string.Empty,
+                                        CorrectAnswer = false,
                                         AnswerOptions = Enum.GetValues(typeof(AnswerOption))
                                             .Cast<AnswerOption>()
                                             .Select(v => v.ToString())

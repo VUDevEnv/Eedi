@@ -26,20 +26,20 @@ namespace Eedi.UnitTests.Controller
         {
             // Arrange
             const string userName = "Test";
-            var improve = Data.GetImprove();
+            var improve = Data.GetImproveWithMisconception();
             
-            _mockImproveService.Setup(x => x.GetImproveAsync(
+            _mockImproveService.Setup(x => x.GetImproveWithMisconceptionAsync(
                 It.IsAny<string>())).ReturnsAsync(improve);
 
             // Act
-            var result = await _improveController.GetImproveAsync(userName);
+            var result = await _improveController.GetImproveWithMisconceptionAsync(userName);
 
             // Assert
             result.Result.Should().BeOfType<OkObjectResult>();
             ((ObjectResult)result.Result).Value.Should().BeOfType<Improve>();
             ((ObjectResult)result.Result)?.StatusCode.Should().Be(200);
             ((ObjectResult)result.Result)?.Value.Should().BeEquivalentTo(improve, x=> x.ExcludingMissingMembers());
-            _mockImproveService.Verify(x => x.GetImproveAsync(It.IsAny<string>()), Times.Once);
+            _mockImproveService.Verify(x => x.GetImproveWithMisconceptionAsync(It.IsAny<string>()), Times.Once);
         }
 
         [Fact(DisplayName = "Returns NotFoundObjectResult When Improve Not Found")]
@@ -48,17 +48,17 @@ namespace Eedi.UnitTests.Controller
             // Arrange
             const string userName = "Test";
             Improve? improve = null;
-            _mockImproveService.Setup(x => x.GetImproveAsync(
+            _mockImproveService.Setup(x => x.GetImproveWithMisconceptionAsync(
                 It.IsAny<string>())).ReturnsAsync(improve);
 
             // Act
-            var result = await _improveController.GetImproveAsync(userName);
+            var result = await _improveController.GetImproveWithMisconceptionAsync(userName);
 
             // Assert
             result.Result.Should().BeOfType<NotFoundObjectResult>();
             ((ObjectResult)result.Result)?.StatusCode.Should().Be(404);
             ((ObjectResult)result.Result)?.Value.Should().Be("Improve not found");
-            _mockImproveService.Verify(x => x.GetImproveAsync(It.IsAny<string>()), Times.Once);
+            _mockImproveService.Verify(x => x.GetImproveWithMisconceptionAsync(It.IsAny<string>()), Times.Once);
         }
 
         [Fact(DisplayName = "Returns BadRequestObjectResult When UserName Not Valid For Improve")]
@@ -68,13 +68,13 @@ namespace Eedi.UnitTests.Controller
             const string userName = "";
 
             // Act
-            var result = await _improveController.GetImproveAsync(userName);
+            var result = await _improveController.GetImproveWithMisconceptionAsync(userName);
 
             // Assert
             result.Result.Should().BeOfType<BadRequestObjectResult>();
             ((ObjectResult)result.Result)?.StatusCode.Should().Be(400);
             ((ObjectResult)result.Result)?.Value.Should().Be("Invalid UserName");
-            _mockImproveService.Verify(x => x.GetImproveAsync(It.IsAny<string>()), Times.Never);
+            _mockImproveService.Verify(x => x.GetImproveWithMisconceptionAsync(It.IsAny<string>()), Times.Never);
         }
 
         [Theory(DisplayName = "Returns OkObjectResult When Misconception Answer Is Valid And Updated Successfully")]
@@ -116,21 +116,51 @@ namespace Eedi.UnitTests.Controller
         public static IEnumerable<object[]> MisconceptionAnswerInvalidData =>
             new List<object[]>
             {
-                new object[] { new MisconceptionAnswer { Answer = "a", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1 }},
-                new object[] { new MisconceptionAnswer { Answer = "b", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1 }},
-                new object[] { new MisconceptionAnswer { Answer = "c", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1  }},
-                new object[] { new MisconceptionAnswer { Answer = "d", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1  }},
-                new object[] { new MisconceptionAnswer { Answer = "E", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1  }},
-                new object[] { new MisconceptionAnswer { Answer = "e", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1  }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "a", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "b", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "c", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "d", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "E", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "e", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
             };
 
         public static IEnumerable<object[]> MisconceptionAnswerValidData =>
             new List<object[]>
             {
-                new object[] { new MisconceptionAnswer { Answer = "A", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1 }},
-                new object[] { new MisconceptionAnswer { Answer = "B", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1 }},
-                new object[] { new MisconceptionAnswer { Answer = "C", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1  }},
-                new object[] { new MisconceptionAnswer { Answer = "D", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1  }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "A", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "B", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "C", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "D", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
             };
     }
 }

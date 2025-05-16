@@ -6,12 +6,12 @@ namespace Eedi.Business
 {
     public class ImproveService : IImproveService
     {
-        public async Task<Improve?> GetImproveAsync(string userName)
+        public async Task<Improve?> GetImproveWithMisconceptionAsync(string userName)
         {
             if (string.IsNullOrWhiteSpace(userName))
                 throw new ArgumentException("UserName cannot be null or whitespace.", nameof(userName));
             
-            var improve = Data.GetImprove();
+            var improve = Data.GetImproveWithMisconception();
 
             return await Task.FromResult(improve);
         }

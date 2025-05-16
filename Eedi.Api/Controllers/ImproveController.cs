@@ -26,23 +26,23 @@ namespace Eedi.Api.Controllers
         }
 
         /// <summary>
-        /// Get improve details for a specific user
+        /// Get improve details for a specific user with misconception/s
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
         /// <response code="400">BadRequest</response>
         /// <response code="200">OK</response>
         /// <response code="404">Not Found</response>
-        [HttpGet("improve")]        
+        [HttpGet("improveWithMisconception")]        
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Improve>> GetImproveAsync(string userName)
+        public async Task<ActionResult<Improve>> GetImproveWithMisconceptionAsync(string userName)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(userName))                
                     return BadRequest("Invalid UserName");                
 
-                var improve = await _improveService.GetImproveAsync(userName);
+                var improve = await _improveService.GetImproveWithMisconceptionAsync(userName);
 
                 if (improve == null)                
                     return NotFound("Improve not found");               

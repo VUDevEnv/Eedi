@@ -22,7 +22,7 @@ namespace Eedi.UnitTests.Services
             const string userName = "";
 
             // Act, Assert
-            var act = async () => { await _improveService.GetImproveAsync(userName); };
+            var act = async () => { await _improveService.GetImproveWithMisconceptionAsync(userName); };
             await act.Should().ThrowAsync<ArgumentException>();
         }
 
@@ -31,10 +31,10 @@ namespace Eedi.UnitTests.Services
         {
             // Arrange
             const string userName = "Test";
-            var improve = Data.GetImprove();
+            var improve = Data.GetImproveWithMisconception();
 
             // Act
-            var result = await _improveService.GetImproveAsync(userName);
+            var result = await _improveService.GetImproveWithMisconceptionAsync(userName);
 
             // Assert
             result.Should().NotBeNull();
@@ -68,21 +68,51 @@ namespace Eedi.UnitTests.Services
         public static IEnumerable<object[]> MisconceptionAnswerInvalidData =>
             new List<object[]>
             {
-                new object[] { new MisconceptionAnswer { Answer = "a", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1 }},
-                new object[] { new MisconceptionAnswer { Answer = "b", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1 }},
-                new object[] { new MisconceptionAnswer { Answer = "c", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1  }},
-                new object[] { new MisconceptionAnswer { Answer = "d", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1  }},
-                new object[] { new MisconceptionAnswer { Answer = "E", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1  }},
-                new object[] { new MisconceptionAnswer { Answer = "e", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1  }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "a", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "b", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "c", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "d", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "E", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "e", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
             };
 
         public static IEnumerable<object[]> MisconceptionAnswerValidData =>
             new List<object[]>
             {
-                new object[] { new MisconceptionAnswer { Answer = "A", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1 }},
-                new object[] { new MisconceptionAnswer { Answer = "B", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1 }},
-                new object[] { new MisconceptionAnswer { Answer = "C", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1  }},
-                new object[] { new MisconceptionAnswer { Answer = "D", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1  }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "A", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "B", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "C", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
+                new object[] { new MisconceptionAnswer
+                {
+                    Answer = "D", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
+                }},
             };
     }
 }

@@ -4,7 +4,7 @@ namespace Eedi.Business.Contract
 {
     public interface IImproveService
     {
-        Task<Improve?> GetImproveAsync(string userName);       
+        Task<Improve?> GetImproveWithMisconceptionAsync(string userName);       
         Task<MisconceptionAnswer> UpdateMisconceptionAnswerAsync(MisconceptionAnswer misconceptionAnswer);
     }
 }
