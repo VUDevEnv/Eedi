@@ -61,8 +61,10 @@ namespace Eedi.UnitTests.Services
             var improve = Data.GetImproveWithMisconception();
 
             // Assert
+            result.Should().NotBeNull();
             result.Should().BeOfType<Improve>();
             result.Should().BeEquivalentTo(improve, x => x.ExcludingMissingMembers());
+            result.Topics.Should().HaveCount(2);
         }
 
         public static IEnumerable<object[]> MisconceptionAnswerInvalidData =>
