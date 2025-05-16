@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Eedi.Business.Contract\Eedi.Business.Contract.csproj" />
+    <ProjectReference Include="..\Eedi.Business.Entities\Eedi.Business.Entities.csproj" />
+  </ItemGroup>
+
+</Project>
