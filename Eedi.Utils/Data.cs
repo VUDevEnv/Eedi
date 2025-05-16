@@ -28,6 +28,8 @@ namespace Eedi.Utils
                                         Id = 1,
                                         QuestionImage = string.Empty,
                                         CorrectAnswer = false,
+                                        Answer = "A",
+                                        AnswerText = "I think you have counted down rather than up. You can use a number line to help you.",
                                         AnswerOptions = Enum.GetValues(typeof(AnswerOption))
                                             .Cast<AnswerOption>()
                                             .Select(v => v.ToString())
@@ -38,6 +40,8 @@ namespace Eedi.Utils
                                         Id = 2,
                                         QuestionImage = string.Empty,
                                         CorrectAnswer = false,
+                                        Answer = "B",
+                                        AnswerText = "I think you have counted up rather than down. You can use a number line to help you.",
                                         AnswerOptions = Enum.GetValues(typeof(AnswerOption))
                                             .Cast<AnswerOption>()
                                             .Select(v => v.ToString())
@@ -64,6 +68,8 @@ namespace Eedi.Utils
                                         Id = 1,
                                         QuestionImage = string.Empty,
                                         CorrectAnswer = false,
+                                        Answer = "A",
+                                        AnswerText = "I think you have counted down rather than up. You can use a number line to help you.",
                                         AnswerOptions = Enum.GetValues(typeof(AnswerOption))
                                             .Cast<AnswerOption>()
                                             .Select(v => v.ToString())

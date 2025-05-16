@@ -81,17 +81,19 @@ namespace Eedi.UnitTests.Controller
         [MemberData(nameof(MisconceptionAnswerValidData))]
         public async Task ReturnsOkObjectResultWhenMisconceptionAnswerValidAndUpdated(MisconceptionAnswer validMisconceptionAnswer)
         {
+            // Arrange
+            var improve = Data.GetImproveWithMisconception();
             _mockImproveService.Setup(x => x.UpdateMisconceptionAnswerAsync(
-                It.IsAny<MisconceptionAnswer>())).ReturnsAsync(validMisconceptionAnswer);
+                It.IsAny<MisconceptionAnswer>())).ReturnsAsync(improve);
 
             // Act
             var result = await _improveController.UpdateMisconceptionAnswerAsync(validMisconceptionAnswer);
 
             // Assert
             result.Result.Should().BeOfType<OkObjectResult>();
-            ((ObjectResult)result.Result)?.Value.Should().BeOfType<MisconceptionAnswer>();
+            ((ObjectResult)result.Result)?.Value.Should().BeOfType<Improve>();
             ((ObjectResult)result.Result)?.StatusCode.Should().Be(200);
-            ((ObjectResult)result.Result)?.Value.Should().BeEquivalentTo(validMisconceptionAnswer, x=> x.ExcludingMissingMembers());
+            ((ObjectResult)result.Result)?.Value.Should().BeEquivalentTo(improve, x=> x.ExcludingMissingMembers());
             _mockImproveService.Verify(x => x.UpdateMisconceptionAnswerAsync(It.IsAny<MisconceptionAnswer>()), Times.Once);
         }
 
@@ -100,8 +102,9 @@ namespace Eedi.UnitTests.Controller
         public async Task ReturnsBadRequestObjectResultWhenMisconceptionAnswerNotValidForUpdate(MisconceptionAnswer invalidMisconceptionAnswer)
         {
             // Arrange
+            var improve = Data.GetImproveWithMisconception();
             _mockImproveService.Setup(x => x.UpdateMisconceptionAnswerAsync(
-                It.IsAny<MisconceptionAnswer>())).ReturnsAsync(invalidMisconceptionAnswer);
+                It.IsAny<MisconceptionAnswer>())).ReturnsAsync(improve);
 
             // Act
             var result = await _improveController.UpdateMisconceptionAnswerAsync(invalidMisconceptionAnswer);

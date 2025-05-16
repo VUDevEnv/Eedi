@@ -16,13 +16,21 @@ namespace Eedi.Business
             return await Task.FromResult(improve);
         }
 
-        public async Task<MisconceptionAnswer> UpdateMisconceptionAnswerAsync(MisconceptionAnswer misconceptionAnswer)
+        public async Task<Improve> UpdateMisconceptionAnswerAsync(MisconceptionAnswer misconceptionAnswer)
         {
             if (Enum.TryParse(misconceptionAnswer.Answer, out AnswerOption answerOption)
                 && Enum.IsDefined(typeof(AnswerOption), misconceptionAnswer.Answer))
-                return await Task.FromResult(misconceptionAnswer);
+            {
+                // TODO:Persist MisconceptionAnswer data
+
+                // Return Improve
+                var improve = Data.GetImproveWithMisconception();
+                return await Task.FromResult(improve);
+            }
             else
+            {
                 throw new ArgumentException("Misconception Answer is invalid", nameof(misconceptionAnswer.Answer));
+            }
         }
     }
 }

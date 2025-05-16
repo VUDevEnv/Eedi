@@ -65,17 +65,17 @@ namespace Eedi.Api.Controllers
         /// <response code="200">OK</response>
         [HttpPut("misconceptionAnswer")]        
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<MisconceptionAnswer>> UpdateMisconceptionAnswerAsync(MisconceptionAnswer misconceptionAnswer)
+        public async Task<ActionResult<Improve>> UpdateMisconceptionAnswerAsync(MisconceptionAnswer misconceptionAnswer)
         {
             try
             {
                 if (Enum.TryParse(misconceptionAnswer.Answer, out AnswerOption _) 
                     && Enum.IsDefined(typeof(AnswerOption), misconceptionAnswer.Answer))
                 {
-                    var updatedMisconceptionAnswer =
+                    var improve =
                         await _improveService.UpdateMisconceptionAnswerAsync(misconceptionAnswer);
 
-                    return Ok(updatedMisconceptionAnswer);
+                    return Ok(improve);
                 }
 
                 return BadRequest($"Invalid Misconception Answer {misconceptionAnswer.Answer}");

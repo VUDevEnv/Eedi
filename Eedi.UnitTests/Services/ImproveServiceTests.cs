@@ -58,11 +58,11 @@ namespace Eedi.UnitTests.Services
         {
             // Act
             var result = await _improveService.UpdateMisconceptionAnswerAsync(validMisconceptionAnswer);
+            var improve = Data.GetImproveWithMisconception();
 
             // Assert
-            result.Should().BeOfType<MisconceptionAnswer>();
-            result.Should().BeEquivalentTo(validMisconceptionAnswer, x => x.ExcludingMissingMembers());
-            result.MisconceptionId.Should().Be(1);
+            result.Should().BeOfType<Improve>();
+            result.Should().BeEquivalentTo(improve, x => x.ExcludingMissingMembers());
         }
 
         public static IEnumerable<object[]> MisconceptionAnswerInvalidData =>
