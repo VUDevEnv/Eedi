@@ -52,9 +52,9 @@ namespace Eedi.UnitTests.Services
             await act.Should().ThrowAsync<ArgumentException>();
         }
 
-        [Theory(DisplayName = "Returns OkObjectResult When Misconception Answer Is Valid And Updated Successfully")]
+        [Theory(DisplayName = "Update Misconception Answer Successfully")]
         [MemberData(nameof(MisconceptionAnswerValidData))]
-        public async Task ReturnsOkObjectResultWhenMisconceptionAnswerValidAndUpdated(MisconceptionAnswer validMisconceptionAnswer)
+        public async Task UpdateMisconceptionAnswerSuccessfully(MisconceptionAnswer validMisconceptionAnswer)
         {
             // Act
             var result = await _improveService.UpdateMisconceptionAnswerAsync(validMisconceptionAnswer);

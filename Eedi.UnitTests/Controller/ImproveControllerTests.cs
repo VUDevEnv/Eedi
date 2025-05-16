@@ -43,7 +43,7 @@ namespace Eedi.UnitTests.Controller
         }
 
         [Fact(DisplayName = "Returns NotFoundObjectResult When Improve Not Found")]
-        public async Task ReturnsNotFoundObjectResultWhenSearchListNotFound()
+        public async Task ReturnsNotFoundObjectResultWhenImproveNotFound()
         {
             // Arrange
             const string userName = "Test";
