@@ -13,108 +13,66 @@ namespace Eedi.UnitTests.Services
         public ImproveServiceTests()
         {
             _improveService = new ImproveService();
-        }
-
-        [Fact(DisplayName = "Get Improve Throws Exception When Username Is Invalid(")]
-        public async Task GetImproveThrowsExceptionWhenUsernameInvalid()
-        {
-            // Arrange
-            const string userName = "";
-
-            // Act, Assert
-            var act = async () => { await _improveService.GetImproveWithMisconceptionAsync(userName); };
-            await act.Should().ThrowAsync<ArgumentException>();
-        }
+        }        
 
         [Fact(DisplayName = "Get Improve Successfully")]
         public async Task GetImproveSuccessfully()
         {
             // Arrange
-            const string userName = "Test";
-            var improve = Data.GetImproveWithMisconception();
+            const int userId = 1;
+            var improve = Data.Improve;
 
             // Act
-            var result = await _improveService.GetImproveWithMisconceptionAsync(userName);
+            var actual = await _improveService.GetImproveAsync(userId);
 
             // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType<Improve>();
-            result.Should().BeEquivalentTo(improve, x => x.ExcludingMissingMembers());
-            result.Topics.Should().HaveCount(2);
+            actual.Should().NotBeNull();
+            actual.Should().BeOfType<Improve>();
+            actual.Should().BeEquivalentTo(improve, x => x.ExcludingMissingMembers());
+            actual.Topics.Should().HaveCount(2);
         }
 
-        [Theory(DisplayName = "Update Misconception Answer Throws Exception When Misconception Answer Is Invalid")]
-        [MemberData(nameof(MisconceptionAnswerInvalidData))]
-        public async Task UpdateMisconceptionAnswerThrowsExceptionWhenMisconceptionAnswerInvalid(MisconceptionAnswer invalidMisconceptionAnswer)
+        [Fact(DisplayName = "Get Question Successfully")]
+        public async Task GetQuestionSuccessfully()
+        {
+            // Arrange
+            const int topicId = 1;
+            const int subTopicId = 1;
+            const int questionId = 1;
+            var question = Data.Question;
+
+            // Act
+            var actual = await _improveService.GetQuestionAsync(topicId, subTopicId, questionId);
+
+            // Assert
+            actual.Should().NotBeNull();
+            actual.Should().BeOfType<Question>();
+            actual.Should().BeEquivalentTo(question, x => x.ExcludingMissingMembers());
+            actual.Id.Should().Be(question.Id);
+        }
+
+        [Theory(DisplayName = "Update Answer When Answer Option Is Valid And Updated Successfully")]
+        [MemberData(nameof(Data.AnswerValidOption), MemberType = typeof(Data))]        
+        public async Task UpdateAnswerWhenAnswerOptionValidAndUpdated(Answer answerValidOption)
+        {
+            // Act
+            var actual = await _improveService.UpdateAnswerAsync(answerValidOption);
+            var verification = Data.Verification;
+
+            // Assert
+            actual.Should().NotBeNull();
+            actual.Should().BeOfType<Verification>();
+            actual.Should().BeEquivalentTo(verification, x => x.ExcludingMissingMembers());
+            actual.Id.Should().Be(verification.Id);
+        }
+
+        [Theory(DisplayName = "Update Answer Throws Exception When Answer Option Not Valid For Update")]
+        [MemberData(nameof(Data.AnswerInValidOption), MemberType = typeof(Data))]
+        public async Task UpdateAnswerThrowsExceptionWhenAnswerOptionNotValidForUpdate(Answer answerInValidOption)
         {
             // Act, Assert
-            var act = async () => { await _improveService.UpdateMisconceptionAnswerAsync(invalidMisconceptionAnswer); };
-            await act.Should().ThrowAsync<ArgumentException>();
+            var actual = async () => { await _improveService.UpdateAnswerAsync(answerInValidOption); };
+            await actual.Should().ThrowAsync<ArgumentException>("Answer option is invalid");
         }
-
-        [Theory(DisplayName = "Update Misconception Answer Successfully")]
-        [MemberData(nameof(MisconceptionAnswerValidData))]
-        public async Task UpdateMisconceptionAnswerSuccessfully(MisconceptionAnswer validMisconceptionAnswer)
-        {
-            // Act
-            var result = await _improveService.UpdateMisconceptionAnswerAsync(validMisconceptionAnswer);
-            var improve = Data.GetImproveWithMisconception();
-
-            // Assert
-            result.Should().NotBeNull();
-            result.Should().BeOfType<Improve>();
-            result.Should().BeEquivalentTo(improve, x => x.ExcludingMissingMembers());
-            result.Topics.Should().HaveCount(2);
-        }
-
-        public static IEnumerable<object[]> MisconceptionAnswerInvalidData =>
-            new List<object[]>
-            {
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "a", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "b", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "c", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "d", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "E", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "e", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-            };
-
-        public static IEnumerable<object[]> MisconceptionAnswerValidData =>
-            new List<object[]>
-            {
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "A", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "B", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "C", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "D", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-            };
     }
 }

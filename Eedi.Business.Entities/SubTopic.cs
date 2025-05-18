@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public IEnumerable<Misconception>? Misconceptions { get; set; }
+        public int QuestionCount { get; set; }
     }
 }

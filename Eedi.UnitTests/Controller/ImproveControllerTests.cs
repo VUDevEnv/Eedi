@@ -25,145 +25,129 @@ namespace Eedi.UnitTests.Controller
         public async Task ReturnsOkObjectResultWhenImproveFound()
         {
             // Arrange
-            const string userName = "Test";
-            var improve = Data.GetImproveWithMisconception();
-            
-            _mockImproveService.Setup(x => x.GetImproveWithMisconceptionAsync(
-                It.IsAny<string>())).ReturnsAsync(improve);
+            const int userId = 1;
+            var improve = Data.Improve;
+
+            _mockImproveService.Setup(x => x.GetImproveAsync(
+                It.IsAny<int>())).ReturnsAsync(improve);
 
             // Act
-            var result = await _improveController.GetImproveWithMisconceptionAsync(userName);
+            var actual = await _improveController.GetImproveAsync(userId);
 
             // Assert
-            result.Result.Should().BeOfType<OkObjectResult>();
-            ((ObjectResult)result.Result).Value.Should().BeOfType<Improve>();
-            ((ObjectResult)result.Result)?.StatusCode.Should().Be(200);
-            ((ObjectResult)result.Result)?.Value.Should().BeEquivalentTo(improve, x=> x.ExcludingMissingMembers());
-            _mockImproveService.Verify(x => x.GetImproveWithMisconceptionAsync(It.IsAny<string>()), Times.Once);
+            actual.Result.Should().BeOfType<OkObjectResult>();
+            ((ObjectResult)actual.Result).Value.Should().BeOfType<Improve>();
+            ((ObjectResult)actual.Result)?.StatusCode.Should().Be(200);
+            ((ObjectResult)actual.Result)?.Value.Should().BeEquivalentTo(improve, x => x.ExcludingMissingMembers());
+            _mockImproveService.Verify(x => x.GetImproveAsync(It.IsAny<int>()), Times.Once);
         }
 
-        [Fact(DisplayName = "Returns NotFoundObjectResult When Improve Not Found")]
+        [Fact(DisplayName = "Returns NotFoundObjectResult When Improve Not Found By UserId")]
         public async Task ReturnsNotFoundObjectResultWhenImproveNotFound()
         {
             // Arrange
-            const string userName = "Test";
+            const int userId = 1;
             Improve? improve = null;
-            _mockImproveService.Setup(x => x.GetImproveWithMisconceptionAsync(
-                It.IsAny<string>())).ReturnsAsync(improve);
+            _mockImproveService.Setup(x => x.GetImproveAsync(
+                It.IsAny<int>())).ReturnsAsync(improve);
 
             // Act
-            var result = await _improveController.GetImproveWithMisconceptionAsync(userName);
+            var actual = await _improveController.GetImproveAsync(userId);
 
             // Assert
-            result.Result.Should().BeOfType<NotFoundObjectResult>();
-            ((ObjectResult)result.Result)?.StatusCode.Should().Be(404);
-            ((ObjectResult)result.Result)?.Value.Should().Be("Improve not found");
-            _mockImproveService.Verify(x => x.GetImproveWithMisconceptionAsync(It.IsAny<string>()), Times.Once);
+            actual.Result.Should().BeOfType<NotFoundObjectResult>();
+            ((ObjectResult)actual.Result)?.StatusCode.Should().Be(404);
+            ((ObjectResult)actual.Result)?.Value.Should().Be("Improve not found");
+            _mockImproveService.Verify(x => x.GetImproveAsync(It.IsAny<int>()), Times.Once);
         }
 
-        [Fact(DisplayName = "Returns BadRequestObjectResult When UserName Not Valid For Improve")]
-        public async Task ReturnsBadRequestObjectResultWhenUserNameNotValidForImprove()
+        [Fact(DisplayName = "Returns OkObjectResult When Question Found By TopicId, SubTopicId and QuestionId")]
+        public async Task ReturnsOkObjectResultWhenQuestionFound()
         {
             // Arrange
-            const string userName = "";
+            const int topicId = 1;
+            const int subTopicId = 1;
+            const int questionId = 1;
+            var question = Data.Question;
+
+            _mockImproveService.Setup(x => x.GetQuestionAsync(
+                It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(question);
 
             // Act
-            var result = await _improveController.GetImproveWithMisconceptionAsync(userName);
+            var actual = await _improveController.GetQuestionAsync(topicId, subTopicId, questionId);
 
             // Assert
-            result.Result.Should().BeOfType<BadRequestObjectResult>();
-            ((ObjectResult)result.Result)?.StatusCode.Should().Be(400);
-            ((ObjectResult)result.Result)?.Value.Should().Be("Invalid UserName");
-            _mockImproveService.Verify(x => x.GetImproveWithMisconceptionAsync(It.IsAny<string>()), Times.Never);
+            actual.Result.Should().BeOfType<OkObjectResult>();
+            ((ObjectResult)actual.Result).Value.Should().BeOfType<Question>();
+            ((ObjectResult)actual.Result)?.StatusCode.Should().Be(200);
+            ((ObjectResult)actual.Result)?.Value.Should().BeEquivalentTo(question, x => x.ExcludingMissingMembers());
+            _mockImproveService.Verify(x => x.GetQuestionAsync(
+                It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
         }
 
-        [Theory(DisplayName = "Returns OkObjectResult When Misconception Answer Is Valid And Updated Successfully")]
-        [MemberData(nameof(MisconceptionAnswerValidData))]
-        public async Task ReturnsOkObjectResultWhenMisconceptionAnswerValidAndUpdated(MisconceptionAnswer validMisconceptionAnswer)
+        [Fact(DisplayName = "Returns NotFoundObjectResult When Question Not Found By TopicId, SubTopicId and QuestionId")]
+        public async Task ReturnsNotFoundObjectResultWhenQuestionNotFound()
         {
             // Arrange
-            var improve = Data.GetImproveWithMisconception();
-            _mockImproveService.Setup(x => x.UpdateMisconceptionAnswerAsync(
-                It.IsAny<MisconceptionAnswer>())).ReturnsAsync(improve);
+            const int topicId = 1;
+            const int subTopicId = 1;
+            const int questionId = 1;
+            Question? question = null;
+            _mockImproveService.Setup(x => x.GetQuestionAsync(
+                It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>())).ReturnsAsync(question);
 
             // Act
-            var result = await _improveController.UpdateMisconceptionAnswerAsync(validMisconceptionAnswer);
+            var actual = await _improveController.GetQuestionAsync(topicId, subTopicId, questionId);
 
             // Assert
-            result.Result.Should().BeOfType<OkObjectResult>();
-            ((ObjectResult)result.Result)?.Value.Should().BeOfType<Improve>();
-            ((ObjectResult)result.Result)?.StatusCode.Should().Be(200);
-            ((ObjectResult)result.Result)?.Value.Should().BeEquivalentTo(improve, x=> x.ExcludingMissingMembers());
-            _mockImproveService.Verify(x => x.UpdateMisconceptionAnswerAsync(It.IsAny<MisconceptionAnswer>()), Times.Once);
+            actual.Result.Should().BeOfType<NotFoundObjectResult>();
+            ((ObjectResult)actual.Result)?.StatusCode.Should().Be(404);
+            ((ObjectResult)actual.Result)?.Value.Should().Be("Question not found");
+            _mockImproveService.Verify(x => x.GetQuestionAsync(
+                It.IsAny<int>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
         }
 
-        [Theory(DisplayName = "Returns BadRequestObjectResult When Misconception Answer Not Valid For Update")]
-        [MemberData(nameof(MisconceptionAnswerInvalidData))]
-        public async Task ReturnsBadRequestObjectResultWhenMisconceptionAnswerNotValidForUpdate(MisconceptionAnswer invalidMisconceptionAnswer)
+        [Theory(DisplayName = "Returns OkObjectResult When Answer Option Is Valid And Updated Successfully")]
+        [MemberData(nameof(Data.AnswerValidOption), MemberType = typeof(Data))]
+        public async Task ReturnsOkObjectResultWhenAnswerOptionValidAndUpdated(Answer answerValidOption)
         {
             // Arrange
-            var improve = Data.GetImproveWithMisconception();
-            _mockImproveService.Setup(x => x.UpdateMisconceptionAnswerAsync(
-                It.IsAny<MisconceptionAnswer>())).ReturnsAsync(improve);
+            var verification = Data.Verification;
+            bool validEnum = true;
+            _mockImproveService.Setup(x => x.UpdateAnswerAsync(
+                It.IsAny<Answer>())).ReturnsAsync(verification);
+            _mockImproveService.Setup(x => x.ValidEnum(
+                It.IsAny<string>())).Returns(validEnum);
 
             // Act
-            var result = await _improveController.UpdateMisconceptionAnswerAsync(invalidMisconceptionAnswer);
-            
+            var actual = await _improveController.UpdateAnswerAsync(answerValidOption);
+
             // Assert
-            result.Result.Should().BeOfType<BadRequestObjectResult>();
-            ((ObjectResult)result.Result)?.StatusCode.Should().Be(400);
-            ((ObjectResult)result.Result)?.Value.Should().Be($"Invalid Misconception Answer { invalidMisconceptionAnswer.Answer }");
-            _mockImproveService.Verify(x => x.UpdateMisconceptionAnswerAsync(It.IsAny<MisconceptionAnswer>()), Times.Never);
+            actual.Result.Should().BeOfType<OkObjectResult>();
+            ((ObjectResult)actual.Result)?.Value.Should().BeOfType<Verification>();
+            ((ObjectResult)actual.Result)?.StatusCode.Should().Be(200);
+            ((ObjectResult)actual.Result)?.Value.Should().BeEquivalentTo(
+                verification, x => x.ExcludingMissingMembers());
+            _mockImproveService.Verify(x => x.UpdateAnswerAsync(It.IsAny<Answer>()), Times.Once);
         }
 
-        public static IEnumerable<object[]> MisconceptionAnswerInvalidData =>
-            new List<object[]>
-            {
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "a", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "b", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "c", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "d", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "E", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "e", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-            };
+        [Theory(DisplayName = "Returns BadRequestObjectResult When Answer Option Not Valid For Update")]
+        [MemberData(nameof(Data.AnswerInValidOption), MemberType = typeof(Data))]
+        public async Task ReturnsBadRequestObjectResultWhenAnswerOptionNotValidForUpdate(Answer answerInValidOption)
+        {
+            // Arrange
+            var verification = Data.Verification;
+            _mockImproveService.Setup(x => x.UpdateAnswerAsync(
+                It.IsAny<Answer>())).ReturnsAsync(verification);
 
-        public static IEnumerable<object[]> MisconceptionAnswerValidData =>
-            new List<object[]>
-            {
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "A", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "B", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "C", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-                new object[] { new MisconceptionAnswer
-                {
-                    Answer = "D", TopicId = 1, SubTopicId = 1, MisconceptionId = 1, UserId = 1, AnswerText = "The correct sequence is -16, -4, -1, -31"
-                }},
-            };
+            // Act
+            var actual = await _improveController.UpdateAnswerAsync(answerInValidOption);
+
+            // Assert
+            actual.Result.Should().BeOfType<BadRequestObjectResult>();
+            ((ObjectResult)actual.Result)?.StatusCode.Should().Be(400);
+            ((ObjectResult)actual.Result)?.Value.Should().Be($"Invalid answer option {answerInValidOption.Option}");
+            _mockImproveService.Verify(x => x.UpdateAnswerAsync(It.IsAny<Answer>()), Times.Never);
+        }
     }
 }
